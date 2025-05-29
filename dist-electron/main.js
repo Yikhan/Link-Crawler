@@ -1,24 +1,22 @@
-import { app, ipcMain, BrowserWindow } from "electron";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+"use strict";
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
+const { runCrawler } = require("./crawler.js");
 function createWindow() {
   const win = new BrowserWindow({
     width: 1e3,
     height: 800,
     webPreferences: {
-      preload: join(__dirname, "../preload/index.cjs"),
+      preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false
     }
   });
-  win.loadURL(process.env.VITE_DEV_SERVER_URL || `file://${join(__dirname, "../dist/index.html")}`);
+  win.loadURL(process.env.VITE_DEV_SERVER_URL || `file://${path.join(__dirname, "../dist/index.html")}`);
 }
 app.whenReady().then(() => {
   createWindow();
   ipcMain.handle("start-crawler", async (_, url) => {
-    const { runCrawler } = await import("./crawler-rsGyWpf8.js");
     return await runCrawler(url);
   });
 });

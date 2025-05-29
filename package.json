@@ -2,7 +2,6 @@
   "name": "link-crawler",
   "private": true,
   "version": "0.0.1",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build && electron-builder",
@@ -10,6 +9,7 @@
   },
   "dependencies": {
     "@varlet/ui": "^3.10.7",
+    "chromium-bidi": "^5.3.1",
     "electron": "^36.3.2",
     "playwright": "^1.52.0",
     "vue": "^3.4.21"

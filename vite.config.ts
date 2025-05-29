@@ -9,27 +9,19 @@ export default defineConfig({
     vue(),
     electron({
       main: {
-        // Shortcut of `build.lib.entry`.
-        entry: 'electron/main.ts',
+        // 同时打包 main.js 和 crawler.js 到 dist-electron
+        entry: ['electron/main.js', 'electron/crawler.js'],
       },
       preload: {
-        // Shortcut of `build.rollupOptions.input`.
-        // Preload scripts may contain Web assets, so use the `build.rollupOptions.input` instead `build.lib.entry`.
-        input: path.join(__dirname, 'electron/preload.ts'),
+        input: path.join(__dirname, 'electron/preload.js'),
       },
-      // Ployfill the Electron and Node.js API for Renderer process.
-      // If you want use Node.js in Renderer process, the `nodeIntegration` needs to be enabled in the Main process.
-      // See 👉 https://github.com/electron-vite/vite-plugin-electron-renderer
       renderer:
         process.env.NODE_ENV === 'test'
-          ? // https://github.com/electron-vite/vite-plugin-electron-renderer/issues/78#issuecomment-2053600808
-            undefined
+          ? undefined
           : {},
     }),
   ],
   build: {
-    rollupOptions: {
-      external: ['playwright', 'chromium-bidi'], // 确保不打进去
-    },
+    // 这里不用 external，避免依赖缺失
   },
 })
